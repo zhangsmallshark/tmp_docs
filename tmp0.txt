@@ -1,0 +1,58 @@
+Climax 
+
+install deepspeed internal
+------------ 
+# Steps to install 
+ 
+WORK_DIR=flash_attn_repro 
+mkdir ${WORK_DIR} && cd ${WORK_DIR} 
+python -m venv venv/flash_attn_repro 
+source venv/flash_attn_repro/bin/activate 
+pip install packaging 
+ 
+# install triton 
+git clone -b legacy-backend https://github.com/openai/triton  
+cd triton/python/ 
+pip install cmake; # build-time dependency 
+pip install -e . 
+ 
+# install 
+cd ${WORK_DIR} 
+git clone -b v1.0.4 https://github.com/HazyResearch/flash-attention 
+cd flash-attention 
+### Edit the source here ### 
+# Disable bias because the implementation doesn't support it  
+# See https://github.com/tohtana/flash-attention/commit/957c1549735e2e7348a1d2032b0fbc628f5d50c3 
+######################## 
+python setup.py install 
+----------- 
+ 
+Test script: 
+------------ 
+from flash_attn.flash_attn_triton import flash_attn_func 
+import torch 
+ 
+q = torch.randn(4,256,16,64).cuda().half() 
+k = torch.randn(4,256,16,64).cuda().half() 
+v= torch.randn(4,256,16,64).cuda().half() 
+attn_out = flash_attn_func(q,k,v) 
+------------ 
+
+https://github.com/microsoft/Megatron-DeepSpeed-internal/pull/17
+
+https://github.com/microsoft/DeepSpeed-internal/pull/535
+
+
+Megatron-E
+https://github.com/microsoft/SparTA/tree/nmsparse
+
+https://docs.google.com/presentation/d/1mpNZN69L7ONVuO2uWptc2IGSB-3CzX0K/edit#slide=id.p1
+https://readthedocs.org/projects/microsoftdistdl/
+
+https://pytorch.org/docs/stable/dynamo/index.html
+https://pytorch.org/docs/stable/rpc.html
+https://www.microsoft.com/en-us/research/publication/empowering-azure-storage-with-rdma/
+
+
+rebase
+https://docs.google.com/document/d/1x27Qy_qLzOsDX4PQn9iM5wU0rbRg1y0jec9_KViuMW0/edit?usp=sharing

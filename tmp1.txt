@@ -1,0 +1,85 @@
+
+Host aisc* !*rrlab*
+  ProxyCommand ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=240 -o UserKnownHostsFile=/dev/null -W %h:%p aiscuser@singularity-ssh-jump.federation.singularity.azure.com
+
+unset NCCL_DEBUG
+vim /job/hostfile
+pip install torchcontrib
+pip install axial_attention
+
+rocm-smi
+
+/weather-blob/users/t-chengzhang/tmp2
+
+Divya-original0
+cd /weather-blob/users/syklocek/workdir/tmp2 && PYTHONPATH=`pwd` deepspeed nowcasting/train_v2_deepspeed.py --training.train_data_size 50000 --training.validation_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Validation_set_2021_400_c24_390min/index.csv --training.train_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Train_set_2018_till_2020_120k_c10_four_seeds/index.csv --data.square_size 1280 --data.input_size 1280 --data.target_size 256 --data.input_channels 1 --data.decoder_input_channels 1 --training.num_workers_per_gpu 4 --training.num_workers_per_gpu_for_validation 16 --gan.enabled True --data.max_samples_per_day 1024 --data.data_param_file nowcasting/data_params/shsr_5h_leadtime_5x5.json --data.source_file nowcasting/data_params/data_sources/mrms_LV_hrrr_cond_LV..json --model.model_param_file nowcasting/model_params/GAN/convlstm_dgmr_discriminator_v4.json --deepspeed --deepspeed_config nowcasting/deepspeed_params/ds_config_zero_v2.json --training.prefetch_factor 2 --model.model_name ConvLstmDGMRGAN --data.per_datasource_dataloading 1 --monitoring.run_id mrms_hrrr_lvs_5h_3nodes --model.checkpoint /wxforecastwestus3/models/d1fc5e09-5f5b-4678-adff-556752bda267/mrms_hrrr_lvs_5h_3nodes/ --model.tag Epoch_66
+
+Divya-original1
+cd /weather-blob/users/syklocek/workdir/tmp2 && PYTHONPATH=`pwd` deepspeed nowcasting/train_v2_deepspeed.py --training.train_data_size 50000 --training.validation_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Validation_set_2021_400_c24_390min/index.csv --training.train_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Train_set_2018_till_2020_120k_c10_four_seeds/index.csv --data.square_size 1280 --data.input_size 1280 --data.target_size 256 --data.input_channels 1 --data.decoder_input_channels 1 --training.num_workers_per_gpu 4 --training.num_workers_per_gpu_for_validation 16 --gan.enabled True --data.max_samples_per_day 1024 --data.data_param_file nowcasting/data_params/shsr_5h_leadtime_5x5.json --data.source_file nowcasting/data_params/data_sources/mrms_LV_hrrr_cond_LV..json --model.model_param_file nowcasting/model_params/GAN/convlstm_dgmr_discriminator_v4.json --deepspeed --deepspeed_config nowcasting/deepspeed_params/ds_config_zero_v2.json --training.prefetch_factor 2 --model.model_name ConvLstmDGMRGAN --data.per_datasource_dataloading 1 --monitoring.run_id mrms_hrrr_lvs_5h_3nodes
+
+Divya-original2
+unset NCCL_DEBUG && cd /weather-blob/users/syklocek/workdir/tmp2 && PYTHONPATH=`pwd` deepspeed nowcasting-cp/train_v2_deepspeed.py --training.train_data_size 50000 --training.validation_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Validation_set_2021_400_c24_390min/index.csv --training.train_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Train_set_2018_till_2020_120k_c10_four_seeds/index.csv --data.square_size 1280 --data.input_size 1280 --data.target_size 256 --data.input_channels 1 --data.decoder_input_channels 1 --training.num_workers_per_gpu 4 --training.num_workers_per_gpu_for_validation 16 --gan.enabled True --data.max_samples_per_day 1024 --data.data_param_file nowcasting-cp/data_params/shsr_5h_leadtime_5x5.json --data.source_file nowcasting-cp/data_params/data_sources/mrms_LV_hrrr_cond_LV..json --model.model_param_file nowcasting-cp/model_params/GAN/convlstm_dgmr_discriminator_v4.json --deepspeed --deepspeed_config nowcasting-cp/deepspeed_params/ds_config_zero_v2.json --training.prefetch_factor 2 --model.model_name ConvLstmDGMRGAN --data.per_datasource_dataloading 1 --monitoring.run_id mrms_hrrr_lvs_5h_3nodes
+
+
+large dataset
+/weather-blob/users/vvragov/deepspeed_index/mega_index.csv
+
+unset NCCL_DEBUG && cd /weather-blob/users/syklocek/workdir/tmp2 && PYTHONPATH=`pwd` deepspeed nowcasting-cp/train_v2_deepspeed.py --training.train_data_size 50000 --training.validation_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Validation_set_2021_400_c24_390min/index.csv --training.train_index_files /weather-blob/users/vvragov/deepspeed_index/mega_index.csv --data.square_size 1280 --data.input_size 1280 --data.target_size 256 --data.input_channels 1 --data.decoder_input_channels 1 --training.num_workers_per_gpu 4 --training.num_workers_per_gpu_for_validation 16 --gan.enabled True --data.max_samples_per_day 1024 --data.data_param_file nowcasting-cp/data_params/shsr_5h_leadtime_5x5.json --data.source_file nowcasting-cp/data_params/data_sources/mrms_LV_hrrr_cond_LV..json --model.model_param_file nowcasting-cp/model_params/GAN/convlstm_dgmr_discriminator_v4.json --deepspeed --deepspeed_config nowcasting-cp/deepspeed_params/ds_config_zero_v2.json --training.prefetch_factor 2 --model.model_name ConvLstmDGMRGAN --data.per_datasource_dataloading 1 --monitoring.run_id mrms_hrrr_lvs_5h_3nodes
+
+
+cm0
+cd /weather-blob/users/t-chengzhang/tmp2 && PYTHONPATH=`pwd` deepspeed nowcasting/train_v2_deepspeed.py --training.train_data_size 50000 --training.validation_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Validation_set_2021_400_c24_390min/index.csv --training.train_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Train_set_2018_till_2020_120k_c10_four_seeds/index.csv --data.square_size 1280 --data.input_size 1280 --data.target_size 256 --data.input_channels 1 --data.decoder_input_channels 1 --training.num_workers_per_gpu 4 --training.num_workers_per_gpu_for_validation 16 --gan.enabled True --data.max_samples_per_day 1024 --data.data_param_file nowcasting/data_params/shsr_5h_leadtime_5x5.json --data.source_file nowcasting/data_params/data_sources/mrms_LV_hrrr_cond_LV..json --model.model_param_file nowcasting/model_params/GAN/convlstm_dgmr_discriminator_v4.json --deepspeed --deepspeed_config nowcasting/deepspeed_params/ds_config_zero_v2.json --training.prefetch_factor 2 --model.model_name ConvLstmDGMRGAN --data.per_datasource_dataloading 1 --monitoring.run_id mrms_hrrr_lvs_5h_3nodes
+
+Volodymyr cm1
+cd /weather-blob/users/t-chengzhang/WeatherForecasting && PYTHONPATH=`pwd` deepspeed nowcasting/train_v2_deepspeed.py --training.train_data_size 50000 --training.validation_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Validation_set_2021_400_c24_330min/index.csv --training.train_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Train_set_2018_till_2020_120k_c10_four_seeds/index.csv --data.square_size 1280 --data.input_size 1280 --training.use_swa True --data.target_size 256 --data.input_channels 1 --data.decoder_input_channels 1 --training.num_workers_per_gpu 4 --training.num_workers_per_gpu_for_validation 8 --gan.enabled True --data.max_samples_per_day 1024 --data.data_param_file nowcasting/data_params/shsr_4h_leadtime_5x5.json --data.source_file nowcasting/data_params/data_sources/mrms_hrrr_conditioning_lvs.json --model.model_param_file nowcasting/model_params/GAN/convlstm_dgmr_discriminator_v4.json --deepspeed --deepspeed_config nowcasting/deepspeed_params/ds_config.json --training.prefetch_factor 2 --model.model_name ConvLstmDGMRGAN --data.per_datasource_dataloading 1
+
+
+scp ./nowcasting-cp/deepspeed_params/ds_config_zero_v2.json node-1:/weather-blob/users/syklocek/workdir/tmp2/nowcasting-cp/deepspeed_params/
+
+scp ./nowcasting-cp/train_v2_deepspeed.py node-1:/weather-blob/users/syklocek/workdir/tmp2/nowcasting-cp/
+
+scp ./nowcasting-cp1/train_v2_deepspeed.py node-1:/weather-blob/users/syklocek/workdir/tmp2/nowcasting-cp1/
+
+
+cd /weather-blob/users/syklocek/workdir/tmp2 && PYTHONPATH=`pwd` deepspeed nowcasting/train_v2_deepspeed.py --training.train_data_size 50000 --training.validation_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Validation_set_2021_400_c24_390min/index.csv --training.train_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Train_set_2018_till_2020_120k_c10_four_seeds/index.csv --data.square_size 1280 --data.input_size 1280 --data.target_size 256 --data.input_channels 5 --data.decoder_input_channels 1 --training.num_workers_per_gpu 4 --training.num_workers_per_gpu_for_validation 16 --gan.enabled True --data.max_samples_per_day 1024 --data.data_param_file nowcasting/data_params/shsr_5h_leadtime_5x5.json --data.source_file nowcasting/data_params/data_sources/mrms_goes_hrrr_conditioning_lvs.json --model.model_param_file nowcasting/model_params/GAN/convlstm_dgmr_discriminator_v4.json --deepspeed --deepspeed_config nowcasting/deepspeed_params/ds_config_zero_v2.json --training.prefetch_factor 2 --model.model_name ConvLstmDGMRGAN --data.per_datasource_dataloading 1 --monitoring.run_id mrms_hrrr_lvs_5h_stresstest
+
+
+cd /weather-blob/users/syklocek/workdir/tmp2 && PYTHONPATH=`pwd` deepspeed nowcasting-cp1/train_v2_deepspeed.py --training.seed 3687 --training.train_data_size 50000 --training.validation_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Validation_set_2021_400_c24_390min/index.csv --training.train_index_files /weather-blob/mrms-netcdf-2/importance_sampling_idx/Train_set_2018_till_2020_120k_c10_four_seeds/index.csv --data.square_size 1280 --data.input_size 1280 --data.target_size 256 --data.input_channels 5 --data.decoder_input_channels 1 --training.num_workers_per_gpu 4 --training.num_workers_per_gpu_for_validation 16 --gan.enabled True --data.max_samples_per_day 1024 --data.data_param_file nowcasting-cp1/data_params/shsr_5h_leadtime_5x5.json --data.source_file nowcasting-cp1/data_params/data_sources/mrms_goes_hrrr_conditioning_lvs.json --model.model_param_file nowcasting-cp1/model_params/GAN/convlstm_dgmr_discriminator_v4.json --deepspeed --deepspeed_config nowcasting-cp1/deepspeed_params/ds_config_zero_v2.json --training.prefetch_factor 2 --model.model_name ConvLstmDGMRGAN --data.per_datasource_dataloading 1 --monitoring.run_id mrms_hrrr_lvs_5h_stresstest
+
+
+Chengming your point about data loading that is happening in the beginning of the training. We have developed several underlying mechanisms for our data loaders to augment the data and eploit dataset to much larger degree while decreasing the I/O. What we are doing is we are downloading data in larger chunks than one data sample. As an example, we download vector of size [B, T +200min, C, H, W]. While our data sample of vector is [B, T, C, H, W]. As data is stored in memory in consqutive chunks its more efficient to download larger tensor in temporal dimension. Now data loader can draw 100 training samples from vector: [B, T +200min, C, H, W]. That is because start time of our training vector can be anywhere in extra 200min interval and 2 mins apart each. For this reason it may appear that downloading is done after initial 10mins of training, but in reality, it is just the case until we exhaust whole large tensor samples, new one is not being downloaded as otherwise we run out of RAM memory. Which is also the reason why our data set of radars might be 1.4T in total but we are effectively exploiting data samples to reach more than 100Tb easily from model perspective using radar data alone. (Ultimately would want to incorporate also HRRR, GEOS, topography, insolation and few other features, so our effective input data will be mutliplied by count of features, so we could even reach 1PB with perfect model that is outperforming google MetNet3).  This optimization helped us in the past to mitigate slow I/O and a lot of work is done on the data-loaders themselves. That is also a reason why measuring loading time for 1 data sample is not telling as much as amortized time for all samples per epoch.
+Leon questions about our model performance and desired tesnor resolution. As of now, our largest tensor has [B, 1, 20,1280, 1280] (input) + [B, 1, 75, 256, 256] output. For the stress test I shared to Chengming, our channel dimension is 6, and mini batch size is 1 per gpu, so our effective input only tensor for GPU is: [1, 6, 20, 1280, 1280] = 750 Mb. Now our desired tensor should be approximately [B, 10, 20, 2560, 2560] = B*4GB. We likely can use 2km x 2km resolution instead of 1x1 so it can be 1GB instead of 4Gb.  When it comes to model optimizations, such as gradient checkpointing or leveraging zero optimizer we have that ready. From model perspective its going well and we have spare capacity, LSTM is rolling this tensor as many times as outputs and has to store intermediate activations to compute gradients. If we simply feed to a model randomly drawn numpy tensors with the same shapes, samples processed by model for stress test is about 5-10x bigger, which means we could approximate current utilization to be at 10-15% for the shared stress test. Such isolation can specifically pinpoint that data loader is the bottleneck here. Stress test dont have all our implemented memory optimizations switched on yet, as it is not necessary to stress current data loading.
+A few another points that are challenges here. Depending on our data source, our data loader is also running various linear spatio-temporal interpolations operations. Due to nature of our tensors resolution we are facing memory fragmentation issues and consistenyl run /proc/sys/vm/compact_memory <= system memory compacting algorithms as if we end up with fragmented memory, then no progress is being done during training for long hours. As you can see per node we have input 16*750Mb+output 1.5Gb = 14 GB being used for one batch at one node. Underlying stored tensors that are used to draw data samples from are therefore much larger - like +80GB at RAM memory at any moment. That is why our constraints are not only I/O, but also memory fragmentation and RAM. We were trading-them off to the best of our ability
+
+
+Hello Chengming, there is separate forward and backward for both discriminator and generator, it depends on GAN stage. Additionally as I mentioned in the other chat, only amortized time makes sense as those mini-batches times will have super high variance. Also many processes hang on the barriers in the stress test. Overall model operations times are insignificant compared to data loaders, you can isolate them. Turn off completely model, and just iterate over data loaders, or make dummy data loader that samples in torch on GPU random inputs and this way you should see 5-10x batches processed. Does it make sense?
+
+
+Full dataset in example 1 is about 30 TB. Example 2 uses 1/20th of that, so about 1.5TB. Batch size is [6, 2, 20, 721, 1440]
+
+Some more dataset info:
+
+Large dataset: 40 years of ERA5 reanalysis at 0.25 degrees
+
+20 variables (up to 75 targeted)
+1-hourly steps (6 hours ok)
+721x1440 spatial shape
+Chunks of 12x721x1440 (time, lat, lon) in zarr format
+Each variable is ~1.5 TB total data
+
+Example 1: too much data to save to local SSD cache
+Job link: https://ml.azure.com/experiments/id/9c7a974d-2a3d-4376-a7fc-eb7e61d05f24/runs/funny_rhubarb_8139j5q6f9?wsid=/subscriptions/3336aa59-aa1d-4562-95ff-30c4e6e6897f/resourceGroups/weather-singularity-rg01/providers/Microsoft.MachineLearningServices/workspaces/weather-singularity-ws01-eastus&flight=itpmerge&tid=72f988bf-86f1-41af-91ab-2d7cd011db47
+Typical loading time: ~30-70 seconds
+Typical compute time: ~1.4-2.0 seconds
+
+Example 2: smaller dataset which fits on SSD cache
+Job link: https://ml.azure.com/experiments/id/9c7a974d-2a3d-4376-a7fc-eb7e61d05f24/runs/silly_rhubarb_9z3b9hf3fl?wsid=/subscriptions/3336aa59-aa1d-4562-95ff-30c4e6e6897f/resourceGroups/weather-singularity-rg01/providers/Microsoft.MachineLearningServices/workspaces/weather-singularity-ws01-eastus&flight=itpmerge&tid=72f988bf-86f1-41af-91ab-2d7cd011db47#overview
+Typical loading time: ~10-15 sec
+Typical compute time: ~1.5-2.5 sec
+For some reason, compute is slower here, and insolation sometimes is slower too. Perhaps some RAM pressure. The difference in loading time is SSD vs blobfuse networking
+
+
+climax
+https://github.com/msr-ai4science/feynman
+
+https://github.com/msr-ai4science/feynman/tree/main/projects/climai_global
